@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue初识</title>
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<style>
+		*{
+			margin:0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+	<div id="first" v-bind:title='message' v-if='test' @click='changeText'>
+		{{message}}
+	</div>
+
+	<script>
+		var app = new Vue({
+			el:'#first',
+			data:{
+				message:'hello world!',
+				test:false,
+				status:true
+			},
+			mounted:function(){
+				if(this.status){
+					this.test = true;
+				}
+			},
+			methods:{
+				changeText:function(){
+					this.message = 'test!!!';
+					setTimeout(function(){
+						this.test = false;
+					},100)
+				}
+			}
+		})
+	</script>
+</body>
+</html>
