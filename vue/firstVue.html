@@ -9,35 +9,72 @@
 			margin:0;
 			padding: 0;
 		}
+		.fade-enter-active,.fade-leave-active{
+			transition: opacity 0.5s;
+		}
+		.fade-enter,.fade-leave-to{
+			opacity:0;
+		}
 	</style>
 </head>
 <body>
-	<div id="first" v-bind:title='message' v-if='test' @click='changeText'>
-		{{message}}
+	<div id="first" v-bind:title='message' @click='changeText'>
+		<transition name='fade'>
+			<p id='testTick' v-if='test' @click='reverse'>{{message}}</p>
+		</transition>
+		<!-- <p>{{b}}</p> -->
+		<!-- <ol>
+			<li v-for='item in items'>
+				{{item.text}}
+			</li>
+		</ol> -->
 	</div>
-
 	<script>
 		var app = new Vue({
 			el:'#first',
 			data:{
 				message:'hello world!',
-				test:false,
-				status:true
+				test:true,
+				items:[
+					{text:'aaa'},
+					{text:'bbbb'},
+					{text:'ccccc'}
+				]
+			},
+			created:function(){
+				this.data = Object.assign({}, this.data, { a: 1, b: 2 });
 			},
 			mounted:function(){
 				if(this.status){
 					this.test = true;
 				}
+				var pre = document.createElement('p');
+				var txt = document.createTextNode(this.data.a);
+				pre.appendChild(txt);
+				document.getElementById('first').appendChild(pre);
+				// console.log(document.getElementById('first'));
 			},
 			methods:{
 				changeText:function(){
 					this.message = 'test!!!';
+					var that = this;
 					setTimeout(function(){
-						this.test = false;
-					},100)
+						that.test = !that.test;
+					},1000);
+				},
+				reverse:function(){
+
 				}
 			}
-		})
+		});
+
+		app.message = 'test tick';
+		console.log(document.getElementById('testTick').textContent === 'test tick');
+		console.log(document.getElementById('testTick').textContent === 'hello world!');
+		console.log(document.getElementById('testTick').textContent);
+		Vue.nextTick(function(){
+			console.log(document.getElementById('testTick').textContent === 'test tick');
+		});
 	</script>
 </body>
 </html>
